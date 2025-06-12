@@ -1,0 +1,34 @@
+---
+- name: Installer fail2ban
+  apt:
+    name: fail2ban
+    state: present
+    update_cache: yes
+  ignore_errors: yes
+
+- name: Copier le fichier de configuration jail.local
+  copy:
+    src: jail.local
+    dest: /etc/fail2ban/jail.local
+    mode: '0644'
+  notify: Redémarrer fail2ban
+
+- name: Activer et démarrer fail2ban
+  systemd:
+    name: fail2ban
+    enabled: yes
+    state: started
+
+- name: Attendre que fail2ban démarre
+  wait_for:
+    path: /var/run/fail2ban/fail2ban.sock
+    timeout: 10
+
+- name: Vérifier les jails actives
+  command: fail2ban-client status
+  register: jail_status
+  changed_when: false
+
+- name: Afficher le résultat
+  debug:
+    var: jail_status.stdout

@@ -1,0 +1,6 @@
+---
+- name: Installer Node Exporter sur la VM auto
+  hosts: node_exporters
+  become: yes
+  roles:
+    - node_exporter

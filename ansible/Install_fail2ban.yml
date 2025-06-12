@@ -1,0 +1,12 @@
+---
+- name: Installer et configurer Fail2ban sur vm-auto
+  hosts: vm_auto
+  become: yes
+  roles:
+    - fail2ban
+
+- name: Installer Fail2ban sur VM1 (local)
+  hosts: monitoring
+  become: yes
+  roles:
+    - fail2ban
